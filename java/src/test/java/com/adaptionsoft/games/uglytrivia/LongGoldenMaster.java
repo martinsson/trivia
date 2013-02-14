@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.adaptionsoft.games.trivia.runner.GameRunner;
 
-public class GoldenMaster {
+public class LongGoldenMaster {
 
     @Test
     public void test() throws Exception {
