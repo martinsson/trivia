@@ -68,7 +68,45 @@ public class GameRunner {
                 if (aGame.currentPlayer == aGame.players.size()) aGame.currentPlayer = 0;
                 notAWinner = true;
 			} else {
-				notAWinner = aGame.wasCorrectlyAnswered();
+				boolean ret;
+                if (aGame.inPenaltyBox[aGame.currentPlayer]){
+                	if (aGame.isGettingOutOfPenaltyBox) {
+                		System.out.println("Answer was correct!!!!");
+                		aGame.purses[aGame.currentPlayer]++;
+                		System.out.println(aGame.players.get(aGame.currentPlayer)
+                				+ " now has "
+                				+ aGame.purses[aGame.currentPlayer]
+                				+ " Gold Coins.");
+                		
+                		boolean winner = !(aGame.purses[aGame.currentPlayer] == 6);
+                		aGame.currentPlayer++;
+                		if (aGame.currentPlayer == aGame.players.size()) aGame.currentPlayer = 0;
+                		
+                		ret = winner;
+                	} else {
+                		aGame.currentPlayer++;
+                		if (aGame.currentPlayer == aGame.players.size()) aGame.currentPlayer = 0;
+                		ret = true;
+                	}
+                	
+                	
+                	
+                } else {
+                
+                	System.out.println("Answer was corrent!!!!");
+                	aGame.purses[aGame.currentPlayer]++;
+                	System.out.println(aGame.players.get(aGame.currentPlayer) 
+                			+ " now has "
+                			+ aGame.purses[aGame.currentPlayer]
+                			+ " Gold Coins.");
+                	
+                	boolean winner = !(aGame.purses[aGame.currentPlayer] == 6);
+                	aGame.currentPlayer++;
+                	if (aGame.currentPlayer == aGame.players.size()) aGame.currentPlayer = 0;
+                	
+                	ret = winner;
+                }
+                notAWinner = ret;
 			}
 			
 			
