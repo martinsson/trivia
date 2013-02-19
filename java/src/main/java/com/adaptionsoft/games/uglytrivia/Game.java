@@ -35,15 +35,20 @@ public class Game {
 	public boolean add(String playerName) {
 		
 	    players.add(playerName);
-	    cPlayer.setMaxPlayers(players.size());
-	    board.putCurrentPlayerOnStartSquare(players.size());
-	    purses[players.size()] = 0;
-	    inPenaltyBox[players.size()] = false;
+	    int lastPlayer = players.size();
+        cPlayer.setMaxPlayers(lastPlayer);
+	    board.putCurrentPlayerOnStartSquare(lastPlayer);
+	    initialisePlayersPurse(lastPlayer);
+	    inPenaltyBox[lastPlayer] = false;
 	    
 	    System.out.println(playerName + " was added");
-	    System.out.println("They are player number " + players.size());
+	    System.out.println("They are player number " + lastPlayer);
 		return true;
 	}
+
+    private void initialisePlayersPurse(int lastPlayer) {
+        purses[lastPlayer] = 0;
+    }
 
     public void askQuestion() {
         LinkedList questions;
@@ -112,13 +117,13 @@ public class Game {
                 if (inPenaltyBox[cPlayer.current()]){
                 	if (isGettingOutOfPenaltyBox) {
                 		System.out.println("Answer was correct!!!!");
-                		purses[cPlayer.current()]++;
+                		gainOneCoin(cPlayer);
                 		System.out.println(players.get(cPlayer.current())
                 				+ " now has "
-                				+ purses[cPlayer.current()]
+                				+ coinsFor(cPlayer)
                 				+ " Gold Coins.");
                 		
-                		boolean winner = !(purses[cPlayer.current()] == 6);
+                		boolean winner = hasNotYetWon();
                 		
                 		cPlayer.changePlayer();
                 		
@@ -133,13 +138,13 @@ public class Game {
                 } else {
                 
                 	System.out.println("Answer was corrent!!!!");
-                	purses[cPlayer.current()]++;
+                	gainOneCoin(cPlayer);
                 	System.out.println(players.get(cPlayer.current()) 
                 			+ " now has "
-                			+ purses[cPlayer.current()]
+                			+ coinsFor(cPlayer)
                 			+ " Gold Coins.");
                 	
-                	boolean winner = !(purses[cPlayer.current()] == 6);
+                	boolean winner = hasNotYetWon();
                 	cPlayer.changePlayer();
                 	
                 	ret = winner;
@@ -150,5 +155,17 @@ public class Game {
     		
     		
     	} while (notAWinner);
+    }
+
+    private boolean hasNotYetWon() {
+        return coinsFor(cPlayer) != 6;
+    }
+
+    private int coinsFor(Player player) {
+        return purses[player.current()];
+    }
+
+    private void gainOneCoin(Player player) {
+        purses[player.current()]++;
     }
 }
