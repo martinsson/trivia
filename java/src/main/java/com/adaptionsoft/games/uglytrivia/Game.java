@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Game {
     public ArrayList players = new ArrayList();
-    public int[] places = new int[6];
     public int[] purses  = new int[6];
     public boolean[] inPenaltyBox  = new boolean[6];
     
@@ -16,7 +15,7 @@ public class Game {
     LinkedList sportsQuestions = new LinkedList();
     LinkedList rockQuestions = new LinkedList();
     
-    public Player cPlayer = new Player(0);
+    public Board board = new Board(new int[6], new Player(0));
     public boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
@@ -35,8 +34,8 @@ public class Game {
 	public boolean add(String playerName) {
 		
 	    players.add(playerName);
-	    cPlayer.setMaxPlayers(players.size());
-	    putCurrentPlayerOnStartPosition();
+	    board.getcPlayer().setMaxPlayers(players.size());
+	    board.putCurrentPlayerOnStartSquare(players.size());
 	    purses[players.size()] = 0;
 	    inPenaltyBox[players.size()] = false;
 	    
@@ -45,97 +44,86 @@ public class Game {
 		return true;
 	}
 
-    private void putCurrentPlayerOnStartPosition() {
-        places[players.size()] = 0;
-    }
-	
-	public void askQuestion() {
-		if (currentCategory() == "Pop")
-			System.out.println(popQuestions.removeFirst());
-		if (currentCategory() == "Science")
-			System.out.println(scienceQuestions.removeFirst());
-		if (currentCategory() == "Sports")
-			System.out.println(sportsQuestions.removeFirst());
-		if (currentCategory() == "Rock")
-			System.out.println(rockQuestions.removeFirst());		
+    public void askQuestion() {
+        LinkedList questions;
+		String currentCategory = board.currentCategory();
+        if (currentCategory == "Pop") {
+            questions = popQuestions;
+        } else
+		if (currentCategory == "Science") {
+		    questions = scienceQuestions;
+		} else
+		if (currentCategory == "Sports") {
+		    questions = sportsQuestions;
+		} else {
+		    questions = rockQuestions;
+		}
+		System.out.println(questions.removeFirst());		
 	}
 	
 	
-	public String currentCategory() {
-		if (squareOfCurrentPlayer() == 0) return "Pop";
-		if (squareOfCurrentPlayer() == 4) return "Pop";
-		if (squareOfCurrentPlayer() == 8) return "Pop";
-		if (squareOfCurrentPlayer() == 1) return "Science";
-		if (squareOfCurrentPlayer() == 5) return "Science";
-		if (squareOfCurrentPlayer() == 9) return "Science";
-		if (squareOfCurrentPlayer() == 2) return "Sports";
-		if (squareOfCurrentPlayer() == 6) return "Sports";
-		if (squareOfCurrentPlayer() == 10) return "Sports";
-		return "Rock";
-	}
-
-    public void playGame(Random rand) {
+	public void playGame(Random rand) {
         boolean notAWinner;
     	do {
     		int diceResult = rand.nextInt(5) + 1;
     		
-            System.out.println(players.get(cPlayer.current()) + " is the current player");
+            System.out.println(players.get(board.getcPlayer().current()) + " is the current player");
             System.out.println("They have rolled a " + diceResult);
             
-            if (inPenaltyBox[cPlayer.current()]) {
+            if (inPenaltyBox[board.getcPlayer().current()]) {
             	if (diceResult % 2 != 0) {
             		isGettingOutOfPenaltyBox = true;
             		
-            		System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
+            		System.out.println(players.get(board.getcPlayer().current()) + " is getting out of the penalty box");
             		
-            		moveForward(diceResult);
+            		board.moveCurrentPlayerForward(diceResult);
             		
-            		System.out.println(players.get(cPlayer.current()) 
+            		System.out.println(players.get(board.getcPlayer().current()) 
             				+ "'s new location is " 
-            				+ squareOfCurrentPlayer());
-            		System.out.println("The category is " + currentCategory());
+            				+ board.squareOfCurrentPlayer());
+            		System.out.println("The category is " + board.currentCategory());
             		askQuestion();
             	} else {
-            		System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
+            		System.out.println(players.get(board.getcPlayer().current()) + " is not getting out of the penalty box");
             		isGettingOutOfPenaltyBox = false;
             		}
             	
             } else {
             
-            	moveForward(diceResult);
+            	board.moveCurrentPlayerForward(diceResult);
             	
-            	System.out.println(players.get(cPlayer.current()) 
+            	System.out.println(players.get(board.getcPlayer().current()) 
             			+ "'s new location is " 
-            			+ squareOfCurrentPlayer());
-            	System.out.println("The category is " + currentCategory());
+            			+ board.squareOfCurrentPlayer());
+            	System.out.println("The category is " + board.currentCategory());
             	askQuestion();
             }
     		
     		if (rand.nextInt(9) == 7) {
     			System.out.println("Question was incorrectly answered");
-                System.out.println(players.get(cPlayer.current())+ " was sent to the penalty box");
-                inPenaltyBox[cPlayer.current()] = true;
+                System.out.println(players.get(board.getcPlayer().current())+ " was sent to the penalty box");
+                inPenaltyBox[board.getcPlayer().current()] = true;
                 
-                cPlayer.changePlayer();
+                board.getcPlayer().changePlayer();
                 notAWinner = true;
     		} else {
     			boolean ret;
-                if (inPenaltyBox[cPlayer.current()]){
+                if (inPenaltyBox[board.getcPlayer().current()]){
                 	if (isGettingOutOfPenaltyBox) {
                 		System.out.println("Answer was correct!!!!");
-                		purses[cPlayer.current()]++;
-                		System.out.println(players.get(cPlayer.current())
+                		purses[board.getcPlayer().current()]++;
+                		System.out.println(players.get(board.getcPlayer().current())
                 				+ " now has "
-                				+ purses[cPlayer.current()]
+                				+ purses[board.getcPlayer().current()]
                 				+ " Gold Coins.");
                 		
-                		boolean winner = !(purses[cPlayer.current()] == 6);
+                		boolean winner = !(purses[board.getcPlayer().current()] == 6);
                 		
-                		cPlayer.changePlayer();
+                		board.getcPlayer().changePlayer();
                 		
                 		ret = winner;
                 	} else {
-                		cPlayer.changePlayer();
+                		board.getcPlayer().changePlayer();
                 		ret = true;
                 	}
                 	
@@ -144,14 +132,14 @@ public class Game {
                 } else {
                 
                 	System.out.println("Answer was corrent!!!!");
-                	purses[cPlayer.current()]++;
-                	System.out.println(players.get(cPlayer.current()) 
+                	purses[board.getcPlayer().current()]++;
+                	System.out.println(players.get(board.getcPlayer().current()) 
                 			+ " now has "
-                			+ purses[cPlayer.current()]
+                			+ purses[board.getcPlayer().current()]
                 			+ " Gold Coins.");
                 	
-                	boolean winner = !(purses[cPlayer.current()] == 6);
-                	cPlayer.changePlayer();
+                	boolean winner = !(purses[board.getcPlayer().current()] == 6);
+                	board.getcPlayer().changePlayer();
                 	
                 	ret = winner;
                 }
@@ -161,14 +149,5 @@ public class Game {
     		
     		
     	} while (notAWinner);
-    }
-
-    private int squareOfCurrentPlayer() {
-        return places[cPlayer.current()];
-    }
-
-    public void moveForward(int diceResult) {
-        places[cPlayer.current()] = squareOfCurrentPlayer() + diceResult;
-        if (squareOfCurrentPlayer() > 11) places[cPlayer.current()] = squareOfCurrentPlayer() - 12;
     }
 }
