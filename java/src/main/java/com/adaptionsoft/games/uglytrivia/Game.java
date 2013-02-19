@@ -15,7 +15,8 @@ public class Game {
     LinkedList sportsQuestions = new LinkedList();
     LinkedList rockQuestions = new LinkedList();
     
-    public Board board = new Board(new int[6], new Player(0));
+    private Player cPlayer = new Player(0);
+    public Board board = new Board(new int[6], cPlayer);
     public boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
@@ -34,7 +35,7 @@ public class Game {
 	public boolean add(String playerName) {
 		
 	    players.add(playerName);
-	    board.getcPlayer().setMaxPlayers(players.size());
+	    cPlayer.setMaxPlayers(players.size());
 	    board.putCurrentPlayerOnStartSquare(players.size());
 	    purses[players.size()] = 0;
 	    inPenaltyBox[players.size()] = false;
@@ -67,24 +68,24 @@ public class Game {
     	do {
     		int diceResult = rand.nextInt(5) + 1;
     		
-            System.out.println(players.get(board.getcPlayer().current()) + " is the current player");
+            System.out.println(players.get(cPlayer.current()) + " is the current player");
             System.out.println("They have rolled a " + diceResult);
             
-            if (inPenaltyBox[board.getcPlayer().current()]) {
+            if (inPenaltyBox[cPlayer.current()]) {
             	if (diceResult % 2 != 0) {
             		isGettingOutOfPenaltyBox = true;
             		
-            		System.out.println(players.get(board.getcPlayer().current()) + " is getting out of the penalty box");
+            		System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
             		
             		board.moveCurrentPlayerForward(diceResult);
             		
-            		System.out.println(players.get(board.getcPlayer().current()) 
+            		System.out.println(players.get(cPlayer.current()) 
             				+ "'s new location is " 
             				+ board.squareOfCurrentPlayer());
             		System.out.println("The category is " + board.currentCategory());
             		askQuestion();
             	} else {
-            		System.out.println(players.get(board.getcPlayer().current()) + " is not getting out of the penalty box");
+            		System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
             		isGettingOutOfPenaltyBox = false;
             		}
             	
@@ -92,7 +93,7 @@ public class Game {
             
             	board.moveCurrentPlayerForward(diceResult);
             	
-            	System.out.println(players.get(board.getcPlayer().current()) 
+            	System.out.println(players.get(cPlayer.current()) 
             			+ "'s new location is " 
             			+ board.squareOfCurrentPlayer());
             	System.out.println("The category is " + board.currentCategory());
@@ -101,29 +102,29 @@ public class Game {
     		
     		if (rand.nextInt(9) == 7) {
     			System.out.println("Question was incorrectly answered");
-                System.out.println(players.get(board.getcPlayer().current())+ " was sent to the penalty box");
-                inPenaltyBox[board.getcPlayer().current()] = true;
+                System.out.println(players.get(cPlayer.current())+ " was sent to the penalty box");
+                inPenaltyBox[cPlayer.current()] = true;
                 
-                board.getcPlayer().changePlayer();
+                cPlayer.changePlayer();
                 notAWinner = true;
     		} else {
     			boolean ret;
-                if (inPenaltyBox[board.getcPlayer().current()]){
+                if (inPenaltyBox[cPlayer.current()]){
                 	if (isGettingOutOfPenaltyBox) {
                 		System.out.println("Answer was correct!!!!");
-                		purses[board.getcPlayer().current()]++;
-                		System.out.println(players.get(board.getcPlayer().current())
+                		purses[cPlayer.current()]++;
+                		System.out.println(players.get(cPlayer.current())
                 				+ " now has "
-                				+ purses[board.getcPlayer().current()]
+                				+ purses[cPlayer.current()]
                 				+ " Gold Coins.");
                 		
-                		boolean winner = !(purses[board.getcPlayer().current()] == 6);
+                		boolean winner = !(purses[cPlayer.current()] == 6);
                 		
-                		board.getcPlayer().changePlayer();
+                		cPlayer.changePlayer();
                 		
                 		ret = winner;
                 	} else {
-                		board.getcPlayer().changePlayer();
+                		cPlayer.changePlayer();
                 		ret = true;
                 	}
                 	
@@ -132,14 +133,14 @@ public class Game {
                 } else {
                 
                 	System.out.println("Answer was corrent!!!!");
-                	purses[board.getcPlayer().current()]++;
-                	System.out.println(players.get(board.getcPlayer().current()) 
+                	purses[cPlayer.current()]++;
+                	System.out.println(players.get(cPlayer.current()) 
                 			+ " now has "
-                			+ purses[board.getcPlayer().current()]
+                			+ purses[cPlayer.current()]
                 			+ " Gold Coins.");
                 	
-                	boolean winner = !(purses[board.getcPlayer().current()] == 6);
-                	board.getcPlayer().changePlayer();
+                	boolean winner = !(purses[cPlayer.current()] == 6);
+                	cPlayer.changePlayer();
                 	
                 	ret = winner;
                 }

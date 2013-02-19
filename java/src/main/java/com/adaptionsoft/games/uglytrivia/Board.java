@@ -13,22 +13,14 @@ public class Board {
         this.places = places;
     }
 
-    public Player getcPlayer() {
-        return cPlayer;
-    }
-
-    public void setcPlayer(Player cPlayer) {
-        this.cPlayer = cPlayer;
-    }
-
     int squareOfCurrentPlayer() {
-        return places[getcPlayer().current()];
+        return places[cPlayer.current()];
     }
 
     public void moveCurrentPlayerForward(int diceResult) {
-        places[getcPlayer().current()] = squareOfCurrentPlayer() + diceResult;
+        places[cPlayer.current()] = squareOfCurrentPlayer() + diceResult;
         if (squareOfCurrentPlayer() > 11) 
-            places[getcPlayer().current()] = squareOfCurrentPlayer() - 12;
+            places[cPlayer.current()] = squareOfCurrentPlayer() - 12;
     }
 
     void putCurrentPlayerOnStartSquare(int lastPlayer) {
