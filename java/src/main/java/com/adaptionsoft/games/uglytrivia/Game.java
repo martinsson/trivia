@@ -36,7 +36,7 @@ public class Game {
 		
 	    players.add(playerName);
 	    cPlayer.setMaxPlayers(players.size());
-	    places[players.size()] = 0;
+	    putCurrentPlayerOnStartPosition();
 	    purses[players.size()] = 0;
 	    inPenaltyBox[players.size()] = false;
 	    
@@ -44,6 +44,10 @@ public class Game {
 	    System.out.println("They are player number " + players.size());
 		return true;
 	}
+
+    private void putCurrentPlayerOnStartPosition() {
+        places[players.size()] = 0;
+    }
 	
 	public void askQuestion() {
 		if (currentCategory() == "Pop")
@@ -58,15 +62,15 @@ public class Game {
 	
 	
 	public String currentCategory() {
-		if (places[cPlayer.current()] == 0) return "Pop";
-		if (places[cPlayer.current()] == 4) return "Pop";
-		if (places[cPlayer.current()] == 8) return "Pop";
-		if (places[cPlayer.current()] == 1) return "Science";
-		if (places[cPlayer.current()] == 5) return "Science";
-		if (places[cPlayer.current()] == 9) return "Science";
-		if (places[cPlayer.current()] == 2) return "Sports";
-		if (places[cPlayer.current()] == 6) return "Sports";
-		if (places[cPlayer.current()] == 10) return "Sports";
+		if (squareOfCurrentPlayer() == 0) return "Pop";
+		if (squareOfCurrentPlayer() == 4) return "Pop";
+		if (squareOfCurrentPlayer() == 8) return "Pop";
+		if (squareOfCurrentPlayer() == 1) return "Science";
+		if (squareOfCurrentPlayer() == 5) return "Science";
+		if (squareOfCurrentPlayer() == 9) return "Science";
+		if (squareOfCurrentPlayer() == 2) return "Sports";
+		if (squareOfCurrentPlayer() == 6) return "Sports";
+		if (squareOfCurrentPlayer() == 10) return "Sports";
 		return "Rock";
 	}
 
@@ -84,13 +88,11 @@ public class Game {
             		
             		System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
             		
-            		places[cPlayer.current()] = places[cPlayer.current()] + diceResult;
-            		if (places[cPlayer.current()] > 11)
-            		    places[cPlayer.current()] = places[cPlayer.current()] - 12;
+            		moveForward(diceResult);
             		
             		System.out.println(players.get(cPlayer.current()) 
             				+ "'s new location is " 
-            				+ places[cPlayer.current()]);
+            				+ squareOfCurrentPlayer());
             		System.out.println("The category is " + currentCategory());
             		askQuestion();
             	} else {
@@ -100,12 +102,11 @@ public class Game {
             	
             } else {
             
-            	places[cPlayer.current()] = places[cPlayer.current()] + diceResult;
-            	if (places[cPlayer.current()] > 11) places[cPlayer.current()] = places[cPlayer.current()] - 12;
+            	moveForward(diceResult);
             	
             	System.out.println(players.get(cPlayer.current()) 
             			+ "'s new location is " 
-            			+ places[cPlayer.current()]);
+            			+ squareOfCurrentPlayer());
             	System.out.println("The category is " + currentCategory());
             	askQuestion();
             }
@@ -160,5 +161,14 @@ public class Game {
     		
     		
     	} while (notAWinner);
+    }
+
+    private int squareOfCurrentPlayer() {
+        return places[cPlayer.current()];
+    }
+
+    public void moveForward(int diceResult) {
+        places[cPlayer.current()] = squareOfCurrentPlayer() + diceResult;
+        if (squareOfCurrentPlayer() > 11) places[cPlayer.current()] = squareOfCurrentPlayer() - 12;
     }
 }
