@@ -1,7 +1,9 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -10,22 +12,31 @@ public class Game {
     public Purses purses = new Purses(new int[6]);
     public boolean[] inPenaltyBox  = new boolean[6];
     
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
+    private Map<String, LinkedList> questions = new HashMap<String, LinkedList>();
     
     private Player cPlayer = new Player(0);
     public Board board = new Board(new int[6], cPlayer);
     public boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
-    	for (int i = 0; i < 50; i++) {
+    	initQuestions();
+    }
+
+    private void initQuestions() {
+        LinkedList popQuestions = new LinkedList();
+        LinkedList scienceQuestions = new LinkedList();
+        LinkedList sportsQuestions = new LinkedList();
+        LinkedList rockQuestions = new LinkedList();
+        for (int i = 0; i < 50; i++) {
 			popQuestions.addLast("Pop Question " + i);
 			scienceQuestions.addLast(("Science Question " + i));
 			sportsQuestions.addLast(("Sports Question " + i));
 			rockQuestions.addLast("Rock Question " + i);
     	}
+    	questions.put("Pop", popQuestions);
+    	questions.put("Science", scienceQuestions);
+    	questions.put("Sports", sportsQuestions);
+    	questions.put("Rock", rockQuestions);
     }
 
 	public boolean isPlayable() {
@@ -47,21 +58,15 @@ public class Game {
 	}
 
     public void askQuestion() {
-        LinkedList questions;
-		String currentCategory = board.currentCategory();
-        if (currentCategory == "Pop") {
-            questions = popQuestions;
-        } else
-		if (currentCategory == "Science") {
-		    questions = scienceQuestions;
-		} else
-		if (currentCategory == "Sports") {
-		    questions = sportsQuestions;
-		} else {
-		    questions = rockQuestions;
-		}
-		System.out.println(questions.removeFirst());		
+        String currentCategory = board.currentCategory();
+		ask(currentCategory);		
 	}
+
+    private void ask(String currentCategory) {
+        LinkedList q = questions.get(currentCategory);
+		Object popNextQuestions = q.removeFirst();
+        System.out.println(popNextQuestions);
+    }
 	
 	
 	public void playGame(Random rand) {
