@@ -3,7 +3,6 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Random;
 
 
@@ -12,34 +11,16 @@ public class Game {
     public Purses purses = new Purses(new int[6]);
     public boolean[] inPenaltyBox  = new boolean[6];
     
-    private Map<String, LinkedList> questions = new HashMap<String, LinkedList>();
-    
+    private Questions questions = new Questions(new HashMap<String, LinkedList>());
     private Player cPlayer = new Player(0);
     public Board board = new Board(new int[6], cPlayer);
     public boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
-    	initQuestions();
+    	questions.initQuestions();
     }
 
-    private void initQuestions() {
-        LinkedList popQuestions = new LinkedList();
-        LinkedList scienceQuestions = new LinkedList();
-        LinkedList sportsQuestions = new LinkedList();
-        LinkedList rockQuestions = new LinkedList();
-        for (int i = 0; i < 50; i++) {
-			popQuestions.addLast("Pop Question " + i);
-			scienceQuestions.addLast(("Science Question " + i));
-			sportsQuestions.addLast(("Sports Question " + i));
-			rockQuestions.addLast("Rock Question " + i);
-    	}
-    	questions.put("Pop", popQuestions);
-    	questions.put("Science", scienceQuestions);
-    	questions.put("Sports", sportsQuestions);
-    	questions.put("Rock", rockQuestions);
-    }
-
-	public boolean isPlayable() {
+    public boolean isPlayable() {
 		return (players.size() >= 2);
 	}
 
@@ -57,19 +38,7 @@ public class Game {
 		return true;
 	}
 
-    public void askQuestion() {
-        String currentCategory = board.currentCategory();
-		ask(currentCategory);		
-	}
-
-    private void ask(String currentCategory) {
-        LinkedList q = questions.get(currentCategory);
-		Object popNextQuestions = q.removeFirst();
-        System.out.println(popNextQuestions);
-    }
-	
-	
-	public void playGame(Random rand) {
+    public void playGame(Random rand) {
         boolean notAWinner;
     	do {
     		int diceResult = rand.nextInt(5) + 1;
@@ -89,7 +58,7 @@ public class Game {
             				+ "'s new location is " 
             				+ board.squareOfCurrentPlayer());
             		System.out.println("The category is " + board.currentCategory());
-            		askQuestion();
+            		questions.askAbout(board.currentCategory());
             	} else {
             		System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
             		isGettingOutOfPenaltyBox = false;
@@ -103,7 +72,7 @@ public class Game {
             			+ "'s new location is " 
             			+ board.squareOfCurrentPlayer());
             	System.out.println("The category is " + board.currentCategory());
-            	askQuestion();
+            	questions.askAbout(board.currentCategory());
             }
     		
     		if (rand.nextInt(9) == 7) {
