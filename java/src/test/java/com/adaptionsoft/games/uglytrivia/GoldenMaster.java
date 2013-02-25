@@ -24,6 +24,7 @@ public abstract class GoldenMaster {
     
     public void testFile(int i) throws IOException, FileNotFoundException {
         File file = tmp.newFile();
+//        File file = new File(REFERENCE_LOCATION + i);
         System.setOut(new PrintStream(file));
         GameRunner.playGame(randomizer);
         assertThat(file).hasContentEqualTo(new File(REFERENCE_LOCATION + i));

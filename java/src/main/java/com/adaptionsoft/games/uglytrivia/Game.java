@@ -68,7 +68,7 @@ public class Game {
 
         } else {
 
-            System.out.println("Answer was corrent!!!!");
+            System.out.println("Answer was correct!!!!");
             purses.gainOneCoin(cPlayer);
             System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
 
