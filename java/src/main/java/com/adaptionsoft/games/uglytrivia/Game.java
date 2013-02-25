@@ -56,26 +56,13 @@ public class Game {
     }
 
     private boolean answerCorrectly(boolean isGettingOutOfPenaltyBox) {
-        boolean notAWinner = true;
-        if (inPenaltyBox[cPlayer.current()]) {
-            if (isGettingOutOfPenaltyBox) {
-                System.out.println("Answer was correct!!!!");
-                purses.gainOneCoin(cPlayer);
-                System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
+        if (inPenaltyBox[cPlayer.current()] && !isGettingOutOfPenaltyBox) return true;
+        
+        System.out.println("Answer was correct!!!!");
+        purses.gainOneCoin(cPlayer);
+        System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
 
-                notAWinner = purses.hasNotYetWon(cPlayer);
-            } 
-
-        } else {
-
-            System.out.println("Answer was correct!!!!");
-            purses.gainOneCoin(cPlayer);
-            System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
-
-            notAWinner = purses.hasNotYetWon(cPlayer);
-        }
-
-        return notAWinner;
+        return purses.hasNotYetWon(cPlayer);
     }
 
     private void answerIncorrectly() {
@@ -85,7 +72,7 @@ public class Game {
     }
 
     private boolean move(int diceResult) {
-        boolean isGettingOutOfPenaltyBox = false;
+        boolean isGettingOutOfPenaltyBox;
 
         if (inPenaltyBox[cPlayer.current()]) {
             if (diceResult % 2 != 0) {
@@ -110,6 +97,7 @@ public class Game {
             System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
             System.out.println("The category is " + board.currentCategory());
             questions.askAbout(board.currentCategory());
+            isGettingOutOfPenaltyBox = false;
         }
         return isGettingOutOfPenaltyBox;
     }
