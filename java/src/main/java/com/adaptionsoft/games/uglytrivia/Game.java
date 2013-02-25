@@ -13,7 +13,6 @@ public class Game {
     private Questions questions = new Questions(new HashMap<String, LinkedList>());
     private Player cPlayer = new Player(0);
     public Board board = new Board(new int[6], cPlayer);
-    public boolean isGettingOutOfPenaltyBox;
 
     public Game() {
         questions.initQuestions();
@@ -38,77 +37,80 @@ public class Game {
     }
 
     public void playGame(Random rand) {
-        boolean notAWinner;
+        boolean notAWinner = true;
         do {
             int diceResult = rand.nextInt(5) + 1;
 
             System.out.println(players.get(cPlayer.current()) + " is the current player");
             System.out.println("They have rolled a " + diceResult);
+            
+            boolean isGettingOutOfPenaltyBox = move(diceResult);
 
-            if (inPenaltyBox[cPlayer.current()]) {
-                if (diceResult % 2 != 0) {
-                    isGettingOutOfPenaltyBox = true;
-
-                    System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
-
-                    board.moveCurrentPlayerForward(diceResult);
-
-                    System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
-                    System.out.println("The category is " + board.currentCategory());
-                    questions.askAbout(board.currentCategory());
-                } else {
-                    System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
-                    isGettingOutOfPenaltyBox = false;
-                }
-
+            if (rand.nextInt(9) == 7) {
+                answerIncorrectly();
             } else {
+                notAWinner = answerCorrectly(isGettingOutOfPenaltyBox);
+            }
+            cPlayer.changePlayer();
+        } while (notAWinner);
+    }
+
+    private boolean answerCorrectly(boolean isGettingOutOfPenaltyBox) {
+        boolean notAWinner = true;
+        if (inPenaltyBox[cPlayer.current()]) {
+            if (isGettingOutOfPenaltyBox) {
+                System.out.println("Answer was correct!!!!");
+                purses.gainOneCoin(cPlayer);
+                System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
+
+                notAWinner = purses.hasNotYetWon(cPlayer);
+            } 
+
+        } else {
+
+            System.out.println("Answer was corrent!!!!");
+            purses.gainOneCoin(cPlayer);
+            System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
+
+            notAWinner = purses.hasNotYetWon(cPlayer);
+        }
+
+        return notAWinner;
+    }
+
+    private void answerIncorrectly() {
+        System.out.println("Question was incorrectly answered");
+        System.out.println(players.get(cPlayer.current()) + " was sent to the penalty box");
+        inPenaltyBox[cPlayer.current()] = true;
+    }
+
+    private boolean move(int diceResult) {
+        boolean isGettingOutOfPenaltyBox = false;
+
+        if (inPenaltyBox[cPlayer.current()]) {
+            if (diceResult % 2 != 0) {
+                isGettingOutOfPenaltyBox = true;
+
+                System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
 
                 board.moveCurrentPlayerForward(diceResult);
 
                 System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
                 System.out.println("The category is " + board.currentCategory());
                 questions.askAbout(board.currentCategory());
-            }
-
-            if (rand.nextInt(9) == 7) {
-                System.out.println("Question was incorrectly answered");
-                System.out.println(players.get(cPlayer.current()) + " was sent to the penalty box");
-                inPenaltyBox[cPlayer.current()] = true;
-
-                cPlayer.changePlayer();
-                notAWinner = true;
             } else {
-                boolean ret;
-                if (inPenaltyBox[cPlayer.current()]) {
-                    if (isGettingOutOfPenaltyBox) {
-                        System.out.println("Answer was correct!!!!");
-                        purses.gainOneCoin(cPlayer);
-                        System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
-
-                        boolean winner = purses.hasNotYetWon(cPlayer);
-
-                        cPlayer.changePlayer();
-
-                        ret = winner;
-                    } else {
-                        cPlayer.changePlayer();
-                        ret = true;
-                    }
-
-                } else {
-
-                    System.out.println("Answer was corrent!!!!");
-                    purses.gainOneCoin(cPlayer);
-                    System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
-
-                    boolean winner = purses.hasNotYetWon(cPlayer);
-                    cPlayer.changePlayer();
-
-                    ret = winner;
-                }
-                notAWinner = ret;
+                System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
+                isGettingOutOfPenaltyBox = false;
             }
 
-        } while (notAWinner);
+        } else {
+
+            board.moveCurrentPlayerForward(diceResult);
+
+            System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
+            System.out.println("The category is " + board.currentCategory());
+            questions.askAbout(board.currentCategory());
+        }
+        return isGettingOutOfPenaltyBox;
     }
 }
