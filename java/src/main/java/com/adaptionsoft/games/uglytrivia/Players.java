@@ -25,7 +25,7 @@ public class Players {
         cPlayer.changePlayer();
     }
 
-    boolean didCurrentPlayerWin() {
+    boolean noOneHasWonYet() {
         return purses.hasNotYetWon(cPlayer);
     }
 

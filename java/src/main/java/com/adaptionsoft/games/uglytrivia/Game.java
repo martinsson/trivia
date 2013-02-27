@@ -66,8 +66,8 @@ public class Game {
                 
                     players.currentPlayerAnswersCorrectly();
                 }
-                notAWinner = players.didCurrentPlayerWin();
             }
+            notAWinner = players.noOneHasWonYet();
             players.nextPlayer();
         } while (notAWinner);
     }
