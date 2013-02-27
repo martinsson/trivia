@@ -13,16 +13,8 @@ public class Players {
         this.cPlayer = cPlayer;
     }
 
-    public void setPurses(Purses purses) {
-        this.purses = purses;
-    }
-
     public Player getcPlayer() {
         return cPlayer;
-    }
-
-    public void setcPlayer(Player cPlayer) {
-        this.cPlayer = cPlayer;
     }
 
     int numberOfPlayers() {
@@ -30,15 +22,15 @@ public class Players {
     }
 
     void nextPlayer() {
-        getcPlayer().changePlayer();
+        cPlayer.changePlayer();
     }
 
     boolean didCurrentPlayerWin() {
-        return purses.hasNotYetWon(getcPlayer());
+        return purses.hasNotYetWon(cPlayer);
     }
 
     int currentPlayerIndex() {
-        return getcPlayer().current();
+        return cPlayer.current();
     }
 
     Object currentPlayerName() {
@@ -52,15 +44,15 @@ public class Players {
 
     void currentPlayerAnswersCorrectly() {
         System.out.println("Answer was correct!!!!");
-        purses.gainOneCoin(getcPlayer());
-        System.out.println(currentPlayerName() + " now has " + purses.coinsFor(getcPlayer()) + " Gold Coins.");
+        purses.gainOneCoin(cPlayer);
+        System.out.println(currentPlayerName() + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
     }
 
     int addPlayer(String playerName) {
         players.add(playerName);
-        getcPlayer().addPlayer(playerName);
+        cPlayer.addPlayer(playerName);
         int lastPlayer1 = numberOfPlayers();
-        getcPlayer().setMaxPlayers(lastPlayer1);
+        cPlayer.setMaxPlayers(lastPlayer1);
         int lastPlayer = lastPlayer1;
         purses.initialisePlayersPurse(lastPlayer);
         return lastPlayer;
