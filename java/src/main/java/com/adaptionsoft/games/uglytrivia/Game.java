@@ -6,29 +6,29 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Game {
-    public ArrayList players = new ArrayList();
-    public Purses purses = new Purses(new int[6]);
     public boolean[] inPenaltyBox = new boolean[6];
 
     private Questions questions = new Questions(new HashMap<String, LinkedList>());
-    private Player cPlayer = new Player(0);
-    public Board board = new Board(new int[6], cPlayer);
+    public Players players = new Players(new ArrayList(), new Purses(new int[6]), new Player(0));
+    public Board board = new Board(new int[6], players.getcPlayer());
 
     public Game() {
         questions.initQuestions();
     }
 
     public boolean isPlayable() {
-        return (players.size() >= 2);
+        return (players.getPlayers().size() >= 2);
     }
 
     public boolean add(String playerName) {
 
-        players.add(playerName);
-        int lastPlayer = players.size();
-        cPlayer.setMaxPlayers(lastPlayer);
+        players.getPlayers().add(playerName);
+        players.getcPlayer().addPlayer(playerName);
+        int lastPlayer = players.getPlayers().size();
+        players.getcPlayer().setMaxPlayers(lastPlayer);
+        
         board.putCurrentPlayerOnStartSquare(lastPlayer);
-        purses.initialisePlayersPurse(lastPlayer);
+        players.getPurses().initialisePlayersPurse(lastPlayer);
         inPenaltyBox[lastPlayer] = false;
 
         System.out.println(playerName + " was added");
@@ -41,40 +41,40 @@ public class Game {
         do {
             int diceResult = rand.nextInt(5) + 1;
 
-            System.out.println(players.get(cPlayer.current()) + " is the current player");
+            System.out.println(players.getPlayers().get(players.getcPlayer().current()) + " is the current player");
             System.out.println("They have rolled a " + diceResult);
-            if (inPenaltyBox[cPlayer.current()]) {
+            if (inPenaltyBox[players.getcPlayer().current()]) {
                 if (diceResult % 2 != 0) {
-                    System.out.println(players.get(cPlayer.current()) + " is getting out of the penalty box");
+                    System.out.println(players.getPlayers().get(players.getcPlayer().current()) + " is getting out of the penalty box");
                 } else {
-                    System.out.println(players.get(cPlayer.current()) + " is not getting out of the penalty box");
+                    System.out.println(players.getPlayers().get(players.getcPlayer().current()) + " is not getting out of the penalty box");
                 }
             }
             
-            boolean isStayingInPenaltyBox = inPenaltyBox[cPlayer.current()] && diceResult % 2 == 0;
+            boolean isStayingInPenaltyBox = inPenaltyBox[players.getcPlayer().current()] && diceResult % 2 == 0;
             if (!isStayingInPenaltyBox) {
                 board.moveCurrentPlayerForward(diceResult);
             
-                System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
+                System.out.println(players.getPlayers().get(players.getcPlayer().current()) + "'s new location is " + board.squareOfCurrentPlayer());
                 System.out.println("The category is " + board.currentCategory());
                 questions.askAbout(board.currentCategory());
             }
             
             if (rand.nextInt(9) == 7) {
                 System.out.println("Question was incorrectly answered");
-                System.out.println(players.get(cPlayer.current()) + " was sent to the penalty box");
-                inPenaltyBox[cPlayer.current()] = true;
+                System.out.println(players.getPlayers().get(players.getcPlayer().current()) + " was sent to the penalty box");
+                inPenaltyBox[players.getcPlayer().current()] = true;
             } else {
                 if (!isStayingInPenaltyBox) {
                     
                 
                     System.out.println("Answer was correct!!!!");
-                    purses.gainOneCoin(cPlayer);
-                    System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
+                    players.getPurses().gainOneCoin(players.getcPlayer());
+                    System.out.println(players.getPlayers().get(players.getcPlayer().current()) + " now has " + players.getPurses().coinsFor(players.getcPlayer()) + " Gold Coins.");
                 }
-                notAWinner = purses.hasNotYetWon(cPlayer);
+                notAWinner = players.getPurses().hasNotYetWon(players.getcPlayer());
             }
-            cPlayer.changePlayer();
+            players.getcPlayer().changePlayer();
         } while (notAWinner);
     }
 }
