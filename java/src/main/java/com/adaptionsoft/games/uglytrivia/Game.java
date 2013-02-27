@@ -8,12 +8,14 @@ import java.util.Random;
 public class Game {
     public boolean[] inPenaltyBox = new boolean[6];
 
-    private Questions questions = new Questions(new HashMap<String, LinkedList>());
     public Players players = new Players(new ArrayList(), new Purses(new int[6]), new Player(0));
-    public Board board = new Board(new int[6], players.getcPlayer());
+    public Board board;
 
     public Game() {
+        Questions questions;
+        questions = new Questions(new HashMap<String, LinkedList>());
         questions.initQuestions();
+        board = new Board(new int[6], players.getcPlayer(), questions);
     }
 
     public boolean isPlayable() {
@@ -52,8 +54,7 @@ public class Game {
                 board.moveCurrentPlayerForward(diceResult);
             
                 System.out.println(players.currentPlayerName() + "'s new location is " + board.squareOfCurrentPlayer());
-                System.out.println("The category is " + board.currentCategory());
-                questions.askAbout(board.currentCategory());
+                board.askAboutCurrentCategory();
             }
             
             if (rand.nextInt(9) == 7) {

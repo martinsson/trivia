@@ -3,10 +3,12 @@ package com.adaptionsoft.games.uglytrivia;
 public class Board {
     private int[] places;
     private Player cPlayer;
+    private Questions questions;
 
-    public Board(int[] places, Player cPlayer) {
+    public Board(int[] places, Player cPlayer, Questions questions) {
         this.places = places;
         this.cPlayer = cPlayer;
+        this.questions = questions;
     }
 
     public void setPlaces(int[] places) {
@@ -38,5 +40,10 @@ public class Board {
     	if (squareOfCurrentPlayer() == 6) return "Sports";
     	if (squareOfCurrentPlayer() == 10) return "Sports";
     	return "Rock";
+    }
+
+    void askAboutCurrentCategory() {
+        System.out.println("The category is " + currentCategory());
+        questions.askAbout(currentCategory());
     }
 }
