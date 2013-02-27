@@ -11,10 +11,6 @@ public class Board {
         this.questions = questions;
     }
 
-    public void setPlaces(int[] places) {
-        this.places = places;
-    }
-
     int squareOfCurrentPlayer() {
         return places[cPlayer.current()];
     }

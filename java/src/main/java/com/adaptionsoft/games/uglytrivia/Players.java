@@ -1,14 +1,14 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Players {
-    private ArrayList players;
+    private List<String> playerNames;
     private Purses purses;
     private Player cPlayer;
 
-    public Players(ArrayList players, Purses purses, Player cPlayer) {
-        this.players = players;
+    public Players(List<String> players, Purses purses, Player cPlayer) {
+        this.playerNames = players;
         this.purses = purses;
         this.cPlayer = cPlayer;
     }
@@ -18,7 +18,7 @@ public class Players {
     }
 
     int numberOfPlayers() {
-        return players.size();
+        return playerNames.size();
     }
 
     void nextPlayer() {
@@ -33,8 +33,8 @@ public class Players {
         return cPlayer.current();
     }
 
-    Object currentPlayerName() {
-        return players.get(currentPlayerIndex());
+    String currentPlayerName() {
+        return playerNames.get(currentPlayerIndex());
     }
 
     void currentPlayerAnswersInCorrectly() {
@@ -49,7 +49,7 @@ public class Players {
     }
 
     int addPlayer(String playerName) {
-        players.add(playerName);
+        playerNames.add(playerName);
         cPlayer.addPlayer(playerName);
         int lastPlayer1 = numberOfPlayers();
         cPlayer.setMaxPlayers(lastPlayer1);

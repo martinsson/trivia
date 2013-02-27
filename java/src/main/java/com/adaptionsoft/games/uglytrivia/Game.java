@@ -6,14 +6,16 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Game {
+    private static final int TOUGH_LUCK = 7;
+
     public boolean[] inPenaltyBox = new boolean[6];
 
-    public Players players = new Players(new ArrayList(), new Purses(new int[6]), new Player(0));
+    public Players players = new Players(new ArrayList<String>(), new Purses(new int[6]), new Player(0));
     public Board board;
 
     public Game() {
         Questions questions;
-        questions = new Questions(new HashMap<String, LinkedList>());
+        questions = new Questions(new HashMap<String, LinkedList<String>>());
         questions.initQuestions();
         board = new Board(new int[6], players.getcPlayer(), questions);
     }
@@ -42,14 +44,14 @@ public class Game {
             System.out.println(players.currentPlayerName() + " is the current player");
             System.out.println("They have rolled a " + diceResult);
             if (inPenaltyBox[players.currentPlayerIndex()]) {
-                if (diceResult % 2 != 0) {
+                if (luckyRoll(diceResult)) {
                     System.out.println(players.currentPlayerName() + " is getting out of the penalty box");
                 } else {
                     System.out.println(players.currentPlayerName() + " is not getting out of the penalty box");
                 }
             }
             
-            boolean isStayingInPenaltyBox = inPenaltyBox[players.currentPlayerIndex()] && diceResult % 2 == 0;
+            boolean isStayingInPenaltyBox = inPenaltyBox[players.currentPlayerIndex()] && ! luckyRoll(diceResult);
             if (!isStayingInPenaltyBox) {
                 board.moveCurrentPlayerForward(diceResult);
             
@@ -57,7 +59,7 @@ public class Game {
                 board.askAboutCurrentCategory();
             }
             
-            if (rand.nextInt(9) == 7) {
+            if (rand.nextInt(9) == TOUGH_LUCK) {
                 players.currentPlayerAnswersInCorrectly();
                 inPenaltyBox[players.currentPlayerIndex()] = true;
             } else {
@@ -70,5 +72,9 @@ public class Game {
             notAWinner = players.noOneHasWonYet();
             players.nextPlayer();
         } while (notAWinner);
+    }
+
+    private boolean luckyRoll(int diceResult) {
+        return diceResult % 2 == 1;
     }
 }
