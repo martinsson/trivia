@@ -13,18 +13,6 @@ public class Players {
         this.cPlayer = cPlayer;
     }
 
-    public ArrayList getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(ArrayList players) {
-        this.players = players;
-    }
-
-    public Purses getPurses() {
-        return purses;
-    }
-
     public void setPurses(Purses purses) {
         this.purses = purses;
     }
@@ -35,5 +23,46 @@ public class Players {
 
     public void setcPlayer(Player cPlayer) {
         this.cPlayer = cPlayer;
+    }
+
+    int numberOfPlayers() {
+        return players.size();
+    }
+
+    void nextPlayer() {
+        getcPlayer().changePlayer();
+    }
+
+    boolean didCurrentPlayerWin() {
+        return purses.hasNotYetWon(getcPlayer());
+    }
+
+    int currentPlayerIndex() {
+        return getcPlayer().current();
+    }
+
+    Object currentPlayerName() {
+        return players.get(currentPlayerIndex());
+    }
+
+    void currentPlayerAnswersInCorrectly() {
+        System.out.println("Question was incorrectly answered");
+        System.out.println(currentPlayerName() + " was sent to the penalty box");
+    }
+
+    void currentPlayerAnswersCorrectly() {
+        System.out.println("Answer was correct!!!!");
+        purses.gainOneCoin(getcPlayer());
+        System.out.println(currentPlayerName() + " now has " + purses.coinsFor(getcPlayer()) + " Gold Coins.");
+    }
+
+    int addPlayer(String playerName) {
+        players.add(playerName);
+        getcPlayer().addPlayer(playerName);
+        int lastPlayer1 = numberOfPlayers();
+        getcPlayer().setMaxPlayers(lastPlayer1);
+        int lastPlayer = lastPlayer1;
+        purses.initialisePlayersPurse(lastPlayer);
+        return lastPlayer;
     }
 }
