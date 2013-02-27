@@ -44,25 +44,27 @@ public class Game {
             System.out.println(players.get(cPlayer.current()) + " is the current player");
             System.out.println("They have rolled a " + diceResult);
             
-            boolean canLeavePenaltyBox = move(diceResult);
+            boolean isStayingInPenaltyBox = move(diceResult);
 
             if (rand.nextInt(9) == 7) {
                 answerIncorrectly();
             } else {
-                notAWinner = answerCorrectly(canLeavePenaltyBox);
+                notAWinner = answerCorrectly(isStayingInPenaltyBox);
             }
             cPlayer.changePlayer();
         } while (notAWinner);
     }
 
-    private boolean answerCorrectly(boolean canLeavePenaltyBox) {
-        if (inPenaltyBox[cPlayer.current()] && !canLeavePenaltyBox) return true;
+    private boolean answerCorrectly(boolean isStayingInPenaltyBox) {
+        if (!isStayingInPenaltyBox) {
+            
         
-        System.out.println("Answer was correct!!!!");
-        purses.gainOneCoin(cPlayer);
-        System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
-
+            System.out.println("Answer was correct!!!!");
+            purses.gainOneCoin(cPlayer);
+            System.out.println(players.get(cPlayer.current()) + " now has " + purses.coinsFor(cPlayer) + " Gold Coins.");
+        }
         return purses.hasNotYetWon(cPlayer);
+        
     }
 
     private void answerIncorrectly() {
@@ -80,17 +82,14 @@ public class Game {
             }
         }
 
-        boolean canLeavePenaltyBox;
-        if (inPenaltyBox[cPlayer.current()] && diceResult % 2 == 0) {
-            canLeavePenaltyBox = false;
-        } else {
+        boolean isStayingInPenaltyBox = inPenaltyBox[cPlayer.current()] && diceResult % 2 == 0;
+        if (!isStayingInPenaltyBox) {
             board.moveCurrentPlayerForward(diceResult);
 
             System.out.println(players.get(cPlayer.current()) + "'s new location is " + board.squareOfCurrentPlayer());
             System.out.println("The category is " + board.currentCategory());
             questions.askAbout(board.currentCategory());
-            canLeavePenaltyBox = true;
         }
-        return canLeavePenaltyBox;
+        return isStayingInPenaltyBox;
     }
 }
