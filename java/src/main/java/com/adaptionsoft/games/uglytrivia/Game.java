@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Game {
@@ -163,7 +164,15 @@ public class Game {
 	}
 
 
-	private boolean didPlayerWin() {
+	@Override
+    public String toString() {
+        return "Game [players=" + players + ", places=" + Arrays.toString(places) + ", purses=" + Arrays.toString(purses) + ", inPenaltyBox="
+                + Arrays.toString(inPenaltyBox) + ", popQuestions=" + popQuestions + ", scienceQuestions=" + scienceQuestions + ", sportsQuestions="
+                + sportsQuestions + ", rockQuestions=" + rockQuestions + ", currentPlayer=" + currentPlayer + ", isGettingOutOfPenaltyBox="
+                + isGettingOutOfPenaltyBox + "]";
+    }
+
+    private boolean didPlayerWin() {
 		return !(purses[currentPlayer] == 6);
 	}
 }
