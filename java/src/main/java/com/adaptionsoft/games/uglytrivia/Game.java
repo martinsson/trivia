@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Game {
+
     ArrayList players = new ArrayList();
     int[] places = new int[6];
     int[] purses  = new int[6];
@@ -163,14 +164,6 @@ public class Game {
 		return true;
 	}
 
-
-	@Override
-    public String toString() {
-        return "Game [players=" + players + ", places=" + Arrays.toString(places) + ", purses=" + Arrays.toString(purses) + ", inPenaltyBox="
-                + Arrays.toString(inPenaltyBox) + ", popQuestions=" + popQuestions + ", scienceQuestions=" + scienceQuestions + ", sportsQuestions="
-                + sportsQuestions + ", rockQuestions=" + rockQuestions + ", currentPlayer=" + currentPlayer + ", isGettingOutOfPenaltyBox="
-                + isGettingOutOfPenaltyBox + "]";
-    }
 
     private boolean didPlayerWin() {
 		return !(purses[currentPlayer] == 6);
