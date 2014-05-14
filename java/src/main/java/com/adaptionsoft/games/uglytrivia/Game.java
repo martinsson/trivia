@@ -163,7 +163,16 @@ public class Game {
 		if (currentPlayer == players.size()) currentPlayer = 0;
 		return true;
 	}
+	
 
+
+    @Override
+    public String toString() {
+        return "Game [players=" + players + ", places=" + Arrays.toString(places) + ", purses=" + Arrays.toString(purses) + ", inPenaltyBox="
+                + Arrays.toString(inPenaltyBox) + ", popQuestions=" + popQuestions + ", scienceQuestions=" + scienceQuestions + ", sportsQuestions="
+                + sportsQuestions + ", rockQuestions=" + rockQuestions + ", currentPlayer=" + currentPlayer + ", isGettingOutOfPenaltyBox="
+                + isGettingOutOfPenaltyBox + "]";
+    }
 
     private boolean didPlayerWin() {
 		return !(purses[currentPlayer] == 6);
