@@ -10,30 +10,26 @@ public class GameRunner {
 	private static boolean notAWinner;
 
 	public static void main(String[] args) {
-		runGame(new Random());
+		Random random = new Random();
+     
+		Game aGame = new Game();
+        aGame.add("Chet");
+        aGame.add("Pat");
+        aGame.add("Sue");
+        
+        do {
+        	
+        	aGame.roll(random.nextInt(5) + 1);
+        	
+        	if (random.nextInt(9) == 7) {
+        		notAWinner = aGame.wrongAnswer();
+        	} else {
+        		notAWinner = aGame.wasCorrectlyAnswered();
+        	}
+        	
+        	
+        	
+        } while (notAWinner);
 		
 	}
-
-    public static Game runGame(Random random) {
-        Game aGame = new Game();
-		
-		aGame.add("Chet");
-		aGame.add("Pat");
-		aGame.add("Sue");
-		
-		do {
-			
-			aGame.roll(random.nextInt(5) + 1);
-			
-			if (random.nextInt(9) == 7) {
-				notAWinner = aGame.wrongAnswer();
-			} else {
-				notAWinner = aGame.wasCorrectlyAnswered();
-			}
-			
-			
-			
-		} while (notAWinner);
-		return aGame;
-    }
 }
