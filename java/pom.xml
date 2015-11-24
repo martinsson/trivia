@@ -28,8 +28,8 @@
                 <!-- You must install approvalstest in you local or corporate repository -->
         <!-- Cf. src/main/lib/README.txt file to install it                      -->
         <dependency>
-            <groupId>com.approvaltests</groupId>
-            <artifactId>approval</artifactId>
+            <groupId>com.github.approvals</groupId>
+            <artifactId>ApprovalTests</artifactId>
             <version>0.13</version>
         </dependency>
     </dependencies>
