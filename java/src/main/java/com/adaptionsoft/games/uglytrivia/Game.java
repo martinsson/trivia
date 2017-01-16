@@ -3,6 +3,8 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import static com.adaptionsoft.games.uglytrivia.Game.PenaltyState.GettingOut;
+import static com.adaptionsoft.games.uglytrivia.Game.PenaltyState.InPenaltyBox;
 import static com.adaptionsoft.games.uglytrivia.Game.PenaltyState.Out;
 
 public class Game {
@@ -14,7 +16,6 @@ public class Game {
     ArrayList players = new ArrayList();
     int[] places = new int[6];
     int[] purses  = new int[6];
-    boolean[] inPenaltyBox  = new boolean[6];
 	PenaltyState[] playersPenaltyState  = new PenaltyState[6];
 
     LinkedList popQuestions = new LinkedList();
@@ -23,8 +24,7 @@ public class Game {
     LinkedList rockQuestions = new LinkedList();
     
     int currentPlayer = 0;
-    boolean isGettingOutOfPenaltyBox;
-    
+
     public  Game(){
     	for (int i = 0; i < 50; i++) {
 			popQuestions.addLast("Pop Question " + i);
@@ -49,7 +49,6 @@ public class Game {
 	    places[howManyPlayers()] = 0;
 	    purses[howManyPlayers()] = 0;
 
-	    inPenaltyBox[howManyPlayers()] = false;
 		playersPenaltyState[howManyPlayers()] = Out;
 	    
 	    System.out.println(playerName + " was added");
@@ -61,15 +60,18 @@ public class Game {
 		return players.size();
 	}
 
+	private void setPenaltyStateTo(PenaltyState newState) {
+		playersPenaltyState[currentPlayer] = newState;
+	}
+
 	public void roll(int roll) {
 		System.out.println(players.get(currentPlayer) + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
 		if (isInPenaltyBox()) {
 			if (roll % 2 != 0) {
-				getOutOfPenaltyBox();
-				isGettingOutOfPenaltyBox = true;
-				
+				setPenaltyStateTo(GettingOut);
+
 				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
 				places[currentPlayer] = places[currentPlayer] + roll;
 				if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
@@ -81,7 +83,6 @@ public class Game {
 				askQuestion();
 			} else {
 				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
-				isGettingOutOfPenaltyBox = false;
 				}
 			
 		} else {
@@ -104,8 +105,7 @@ public class Game {
 
 	private boolean isInPenaltyBox() {
 		PenaltyState penaltyState = playersPenaltyState[currentPlayer];
-//		return penaltyState == PenaltyState.InPenaltyBox || penaltyState == PenaltyState.GettingOut;
-		return inPenaltyBox[currentPlayer];
+		return penaltyState == PenaltyState.InPenaltyBox || penaltyState == PenaltyState.GettingOut;
 	}
 
 	private void askQuestion() {
@@ -136,7 +136,7 @@ public class Game {
 	public boolean wasCorrectlyAnswered() {
 		if (isInPenaltyBox()){
 			if (isGettingOutOfPenaltyBox()) {
-				playersPenaltyState[currentPlayer] = PenaltyState.Out;
+				setPenaltyStateTo(Out);
 
 				System.out.println("Answer was correct!!!!");
 				purses[currentPlayer]++;
@@ -176,17 +176,15 @@ public class Game {
 	}
 
 	private boolean isGettingOutOfPenaltyBox() {
-//		return playersPenaltyState[currentPlayer] == PenaltyState.GettingOut;
-		return isGettingOutOfPenaltyBox;
+		return playersPenaltyState[currentPlayer] == PenaltyState.GettingOut;
 	}
 
 	public boolean wrongAnswer(){
 		System.out.println("Question was incorrectly answered");
 		System.out.println(players.get(currentPlayer)+ " was sent to the penalty box");
 
-		inPenaltyBox[currentPlayer] = true;
-		playersPenaltyState[currentPlayer] = PenaltyState.InPenaltyBox;
-		
+		setPenaltyStateTo(InPenaltyBox);
+
 		currentPlayer++;
 		if (currentPlayer == players.size()) currentPlayer = 0;
 		return true;
