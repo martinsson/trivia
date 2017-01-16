@@ -23,6 +23,27 @@ public class Game {
 		createQuestions();
 	}
 
+	public  Game(String player1, String player2, String player3){
+		this(player1, player2);
+		this.add(player3);
+	}
+
+	public  Game(String player1, String player2, String player3, String player4){
+		this(player1, player2, player3);
+		this.add(player4);
+	}
+
+	public  Game(String player1, String player2, String player3, String player4, String player5){
+		this(player1, player2, player3, player4);
+		this.add(player5);
+	}
+
+	public  Game(String player1, String player2, String player3, String player4, String player5, String player6){
+		this(player1, player2, player3, player4, player5);
+		this.add(player6);
+	}
+
+
 	private void createQuestions() {
 		for (int i = 0; i < 50; i++) {
             popQuestions.addLast("Pop Question " + i);
@@ -40,7 +61,7 @@ public class Game {
 		return (howManyPlayers() >= 2);
 	}
 
-	public boolean add(String playerName) {
+	private boolean add(String playerName) {
 		
 		
 	    players.add(playerName);
