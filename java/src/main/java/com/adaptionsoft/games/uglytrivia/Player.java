@@ -6,6 +6,7 @@ package com.adaptionsoft.games.uglytrivia;
 public class Player {
     private String playerName;
     private boolean inPenaltyBox = false;
+    private int coins = 0;
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -26,5 +27,13 @@ public class Player {
 
     public boolean isInPenaltyBox() {
         return inPenaltyBox;
+    }
+
+    public void earnGoldCoin() {
+        coins++;
+    }
+
+    public int getCoins() {
+        return coins;
     }
 }
