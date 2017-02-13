@@ -16,8 +16,7 @@ public class Game {
     LinkedList rockQuestions = new LinkedList();
     
     int currentPlayer = 0;
-    boolean isGettingOutOfPenaltyBox;
-    
+
     public  Game(){
     	for (int i = 0; i < 50; i++) {
 			popQuestions.addLast("Pop Question " + i);
@@ -60,14 +59,12 @@ public class Game {
 
 			normalRoll(roll);
 		} else if (roll % 2 != 0) {
-			isGettingOutOfPenaltyBox = true;
 
+			player.freeFromPenaltyBox();
 			System.out.println(player + " is getting out of the penalty box");
-
 			normalRoll(roll);
 		} else {
 			System.out.println(player + " is not getting out of the penalty box");
-			isGettingOutOfPenaltyBox = false;
 		}
 
 	}
@@ -112,9 +109,6 @@ public class Game {
 		Player player = playerz.get(currentPlayer);
 
 		if (!player.isInPenaltyBox()) {
-
-			return normalAnswer();
-		} else if (isGettingOutOfPenaltyBox) {
 
 			return normalAnswer();
 		} else {

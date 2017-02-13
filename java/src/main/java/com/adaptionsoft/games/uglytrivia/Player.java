@@ -15,9 +15,9 @@ public class Player {
         inPenaltyBox = true;
     }
 
-//    public void free() {
-//
-//    }
+    public void freeFromPenaltyBox() {
+        inPenaltyBox = false;
+    }
 
     @Override
     public String toString() {
