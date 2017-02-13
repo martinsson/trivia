@@ -9,8 +9,7 @@ public class Game {
 
     int[] places = new int[6];
     int[] purses  = new int[6];
-    boolean[] inPenaltyBox  = new boolean[6];
-    
+
     LinkedList popQuestions = new LinkedList();
     LinkedList scienceQuestions = new LinkedList();
     LinkedList sportsQuestions = new LinkedList();
@@ -42,8 +41,7 @@ public class Game {
 
 	    places[howManyPlayers()] = 0;
 	    purses[howManyPlayers()] = 0;
-	    inPenaltyBox[howManyPlayers()] = false;
-	    
+
 	    System.out.println(playerName + " was added");
 	    System.out.println("They are player number " + playerz.size());
 		return true;
@@ -58,7 +56,7 @@ public class Game {
 		System.out.println(player + " is the current player");
 		System.out.println("They have rolled a " + roll);
 
-		if (!inPenaltyBox[currentPlayer]) {
+		if (!player.isInPenaltyBox()) {
 
 			normalRoll(roll);
 		} else if (roll % 2 != 0) {
@@ -111,20 +109,19 @@ public class Game {
 	}
 
 	public boolean wasCorrectlyAnswered() {
-		if (inPenaltyBox[currentPlayer]){
-			if (isGettingOutOfPenaltyBox) {
-				return normalAnswer();
-			} else {
-				currentPlayer++;
-				if (currentPlayer == playerz.size()) currentPlayer = 0;
-				return true;
-			}
-			
-			
-			
-		} else {
+		Player player = playerz.get(currentPlayer);
+
+		if (!player.isInPenaltyBox()) {
 
 			return normalAnswer();
+		} else if (isGettingOutOfPenaltyBox) {
+
+			return normalAnswer();
+		} else {
+
+			currentPlayer++;
+			if (currentPlayer == playerz.size()) currentPlayer = 0;
+			return true;
 		}
 	}
 
@@ -145,9 +142,11 @@ public class Game {
 
 	public boolean wrongAnswer(){
 		System.out.println("Question was incorrectly answered");
-		System.out.println(playerz.get(currentPlayer)+ " was sent to the penalty box");
-		inPenaltyBox[currentPlayer] = true;
-		
+		Player player = playerz.get(currentPlayer);
+		System.out.println(player + " was sent to the penalty box");
+
+		player.sendToPenaltyBox();
+
 		currentPlayer++;
 		if (currentPlayer == playerz.size()) currentPlayer = 0;
 		return true;

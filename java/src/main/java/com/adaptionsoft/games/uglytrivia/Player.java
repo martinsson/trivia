@@ -23,4 +23,8 @@ public class Player {
     public String toString() {
         return playerName;
     }
+
+    public boolean isInPenaltyBox() {
+        return inPenaltyBox;
+    }
 }
