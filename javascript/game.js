@@ -122,7 +122,7 @@ module.exports = function() {
       if(isGettingOutOfPenaltyBox){
         console.log('Answer was correct!!!!');
         purses[currentPlayer] += 1;
-        console.log(players[currentPlayer] + " now has " +
+        console.log(players[currentPlayer] + " nw has " +
                     purses[currentPlayer]  + " Gold Coins.");
 
         var winner = didPlayerWin();
