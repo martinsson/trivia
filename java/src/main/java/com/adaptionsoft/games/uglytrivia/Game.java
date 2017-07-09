@@ -41,10 +41,6 @@ public class Game {
 
     }
 
-    public String createRockQuestion(int index) {
-        return "Rock Question " + index;
-    }
-
     public boolean add(String playerName) {
 
 
@@ -83,8 +79,7 @@ public class Game {
     }
 
     private void movePlayerOnBoard(int roll) {
-        places[currentPlayer] = places[currentPlayer] + roll;
-        if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+        places[currentPlayer] = (places[currentPlayer] + roll) % 12;
 
         System.out.println(players.get(currentPlayer) + "'s new location is " + places[currentPlayer]);
         System.out.println("The category is " + currentCategory());
@@ -131,8 +126,7 @@ public class Game {
     }
 
     private void changePlayer() {
-        currentPlayer++;
-        if (currentPlayer == players.size()) currentPlayer = 0;
+        currentPlayer = (currentPlayer + 1) % players.size();
     }
 
     private boolean didPlayerWin() {
