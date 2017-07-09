@@ -66,21 +66,18 @@ public class Game {
         System.out.println(players.get(currentPlayer) + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (inPenaltyBox[currentPlayer]) {
-            if (roll % 2 != 0) {
-                inPenaltyBox[currentPlayer] = false;
-
-                System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-                movePlayerOnBoard(roll);
-                askQuestion();
-            } else {
-                System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
-            }
-
-        } else {
+        if (!inPenaltyBox[currentPlayer]) {
 
             movePlayerOnBoard(roll);
             askQuestion();
+        } else if (roll % 2 != 0) {
+            inPenaltyBox[currentPlayer] = false;
+
+            System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
+            movePlayerOnBoard(roll);
+            askQuestion();
+        } else {
+            System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
         }
 
     }
@@ -137,7 +134,6 @@ public class Game {
         currentPlayer++;
         if (currentPlayer == players.size()) currentPlayer = 0;
     }
-
 
     private boolean didPlayerWin() {
         return !(purses[currentPlayer] == 6);
