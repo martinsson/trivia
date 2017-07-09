@@ -63,6 +63,7 @@ public class Game {
 
         if (inPenaltyBox[currentPlayer]) {
             if (roll % 2 != 0) {
+                inPenaltyBox[currentPlayer] = false;
                 isGettingOutOfPenaltyBox = true;
 
                 System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
