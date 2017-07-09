@@ -35,10 +35,6 @@ public class Game {
         return "Rock Question " + index;
     }
 
-    public boolean isPlayable() {
-        return (howManyPlayers() >= 2);
-    }
-
     public boolean add(String playerName) {
 
 
@@ -133,10 +129,7 @@ public class Game {
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
         purses[currentPlayer]++;
-        System.out.println(players.get(currentPlayer)
-                + " now has "
-                + purses[currentPlayer]
-                + " Gold Coins.");
+        System.out.println(players.get(currentPlayer) + " now has " + purses[currentPlayer] + " Gold Coins.");
 
         boolean winner = didPlayerWin();
         changePlayer();
