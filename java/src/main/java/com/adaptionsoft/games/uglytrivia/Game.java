@@ -1,9 +1,6 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.util.Arrays.*;
 
@@ -19,6 +16,7 @@ public class Game {
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
 
+    private Map<String, LinkedList> questionsDeck = new HashMap();
     private List<String> categories = asList("Pop","Science","Sports","Rock");
 
     LinkedList popQuestions = new LinkedList();
@@ -33,8 +31,14 @@ public class Game {
             popQuestions.addLast("Pop Question " + i);
             scienceQuestions.addLast(("Science Question " + i));
             sportsQuestions.addLast(("Sports Question " + i));
-            rockQuestions.addLast(createRockQuestion(i));
+            rockQuestions.addLast("Rock Question " + i);
         }
+
+        questionsDeck.put("Pop", popQuestions);
+        questionsDeck.put("Science", scienceQuestions);
+        questionsDeck.put("Sports", sportsQuestions);
+        questionsDeck.put("Rock", rockQuestions);
+
     }
 
     public String createRockQuestion(int index) {
@@ -90,14 +94,8 @@ public class Game {
     }
 
     private void askQuestion() {
-        if (currentCategory() == "Pop")
-            System.out.println(popQuestions.removeFirst());
-        if (currentCategory() == "Science")
-            System.out.println(scienceQuestions.removeFirst());
-        if (currentCategory() == "Sports")
-            System.out.println(sportsQuestions.removeFirst());
-        if (currentCategory() == "Rock")
-            System.out.println(rockQuestions.removeFirst());
+        Object question = questionsDeck.get(currentCategory()).removeFirst();
+        System.out.println(question);
     }
 
 
