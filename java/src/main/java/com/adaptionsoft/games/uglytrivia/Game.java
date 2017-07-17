@@ -1,13 +1,15 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static java.util.Arrays.*;
 
 public class Game {
 
+
+    /*
+    seems clean as a result,
+     */
 
     public static class Player {
         int purse = 0;
@@ -61,32 +63,21 @@ public class Game {
     }
 
     public void roll(int roll) {
-        System.out.println(currentPlayerName() + " is the current player");
+        System.out.println(cPlayer.name + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (!cPlayer.inPenaltyBox) {
+        if (isOutOfPenaltyBox()) {
             movePlayerOnBoard(roll);
             askQuestion();
         } else if (roll % 2 != 0) {
-            cPlayer.inPenaltyBox = false;
-            System.out.println(currentPlayerName() + " is getting out of the penalty box");
+            allowPlayerOutOfPenaltyBox();
+            System.out.println(cPlayer.name + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
             askQuestion();
         } else {
-            System.out.println(currentPlayerName() + " is not getting out of the penalty box");
+            System.out.println(cPlayer.name + " is not getting out of the penalty box");
         }
 
-    }
-
-    private void movePlayerOnBoard(int roll) {
-        cPlayer.place = (cPlayer.place + roll) % 12;
-
-        System.out.println(currentPlayerName() + "'s new location is " + getPlace());
-        System.out.println("The category is " + currentCategory());
-    }
-
-    private int getPlace() {
-        return cPlayer.place;
     }
 
     private void askQuestion() {
@@ -101,7 +92,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (!cPlayer.inPenaltyBox) {
+        if (isOutOfPenaltyBox()) {
             return winCoin();
         } else {
             changePlayer();
@@ -110,33 +101,57 @@ public class Game {
     }
 
     public boolean wrongAnswer() {
-        System.out.println("Question was incorrectly answered");
-        System.out.println(currentPlayerName() + " was sent to the penalty box");
-        cPlayer.inPenaltyBox = true;
+        sendPlayerToPenaltyBox();
+        System.out.println(cPlayer.name + " was sent to the penalty box");
 
         changePlayer();
         return true;
     }
 
+    private void movePlayerOnBoard(int roll) {
+        cPlayer.place = (cPlayer.place + roll) % 12;
+
+        System.out.println(cPlayer.name + "'s new location is " + getPlace());
+        System.out.println("The category is " + currentCategory());
+    }
+
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
-        cPlayer.purse++;
-        System.out.println(currentPlayerName() + " now has " + cPlayer.purse + " Gold Coins.");
-
-        boolean winner = didPlayerWin();
+        boolean winner = winCoinPlayer();
         changePlayer();
 
         return winner;
-    }
-
-    private Object currentPlayerName() {
-        return cPlayer.name;
     }
 
     private void changePlayer() {
         currentPlayer = (currentPlayer + 1) % realPlayers.size();
         cPlayer = realPlayers.get(currentPlayer);
     }
+
+    private boolean isOutOfPenaltyBox() {
+        return !cPlayer.inPenaltyBox;
+    }
+
+    private int getPlace() {
+        return cPlayer.place;
+    }
+
+    private void allowPlayerOutOfPenaltyBox() {
+        cPlayer.inPenaltyBox = false;
+    }
+
+    private void sendPlayerToPenaltyBox() {
+        System.out.println("Question was incorrectly answered");
+        cPlayer.inPenaltyBox = true;
+    }
+
+    private boolean winCoinPlayer() {
+        cPlayer.purse++;
+        System.out.println(cPlayer.name + " now has " + cPlayer.purse + " Gold Coins.");
+
+        return didPlayerWin();
+    }
+
 
     private boolean didPlayerWin() {
         return !(cPlayer.purse == 6);
