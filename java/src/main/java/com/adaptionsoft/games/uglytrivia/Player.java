@@ -10,7 +10,7 @@ public class Player {
         this.name = name;
     }
 
-    public boolean winCoinPlayer() {
+    public boolean winCoin() {
         purse++;
         System.out.println(name + " now has " + purse + " Gold Coins.");
 
@@ -18,12 +18,12 @@ public class Player {
         return didPlayerNotWin;
     }
 
-    public void sendPlayerToPenaltyBox() {
+    public void sendToPenaltyBox() {
         System.out.println("Question was incorrectly answered");
         inPenaltyBox = true;
     }
 
-    public void allowPlayerOutOfPenaltyBox() {
+    public void allowOutOfPenaltyBox() {
         inPenaltyBox = false;
     }
 

@@ -59,7 +59,7 @@ public class Game {
             movePlayerOnBoard(roll);
             askQuestion();
         } else if (roll % 2 != 0) {
-            cPlayer.allowPlayerOutOfPenaltyBox();
+            cPlayer.allowOutOfPenaltyBox();
             System.out.println(cPlayer.name + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
             askQuestion();
@@ -90,7 +90,7 @@ public class Game {
     }
 
     public boolean wrongAnswer() {
-        cPlayer.sendPlayerToPenaltyBox();
+        cPlayer.sendToPenaltyBox();
         System.out.println(cPlayer.name + " was sent to the penalty box");
 
         changePlayer();
@@ -107,7 +107,7 @@ public class Game {
 
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
-        boolean winner = cPlayer.winCoinPlayer();
+        boolean winner = cPlayer.winCoin();
         changePlayer();
 
         return winner;
