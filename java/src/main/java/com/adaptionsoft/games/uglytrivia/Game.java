@@ -18,6 +18,8 @@ public class Game {
 
     Learnings, be very wary about what to extract, ex boardsize lingers in a function that well could have ended up in
     player, but might as well be in board class
+
+    I have no real idea on what to do with movePlayerOnBoard. Seems as linked to board as to Player
      */
 
     private Player cPlayer;
@@ -107,11 +109,14 @@ public class Game {
     }
 
     private void movePlayerOnBoard(int roll) {
-        cPlayer.place = (cPlayer.place + roll) % 12;
+        int playersCurrentPlace = cPlayer.place;
 
-        int newPlace = cPlayer.place;
+        int newPlace = (playersCurrentPlace + roll) % 12;
+        String nextCategory = categoryAt(newPlace);
         System.out.println(cPlayer.name + "'s new location is " + newPlace);
-        System.out.println("The category is " + categoryAt(newPlace));
+        System.out.println("The category is " + nextCategory);
+
+        cPlayer.place = newPlace;
     }
 
     private boolean winCoin() {
