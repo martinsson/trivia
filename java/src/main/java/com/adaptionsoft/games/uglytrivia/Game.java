@@ -20,6 +20,27 @@ public class Game {
         public Player(String name) {
             this.name = name;
         }
+
+        public boolean winCoinPlayer() {
+            purse++;
+            System.out.println(name + " now has " + purse + " Gold Coins.");
+
+            boolean didPlayerNotWin = purse != 6;
+            return didPlayerNotWin;
+        }
+
+        public void sendPlayerToPenaltyBox() {
+            System.out.println("Question was incorrectly answered");
+            inPenaltyBox = true;
+        }
+
+        public void allowPlayerOutOfPenaltyBox() {
+            inPenaltyBox = false;
+        }
+
+        public boolean isOutOfPenaltyBox() {
+            return !inPenaltyBox;
+        }
     }
 
     private Player cPlayer;
@@ -66,11 +87,11 @@ public class Game {
         System.out.println(cPlayer.name + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (isOutOfPenaltyBox()) {
+        if (cPlayer.isOutOfPenaltyBox()) {
             movePlayerOnBoard(roll);
             askQuestion();
         } else if (roll % 2 != 0) {
-            allowPlayerOutOfPenaltyBox();
+            cPlayer.allowPlayerOutOfPenaltyBox();
             System.out.println(cPlayer.name + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
             askQuestion();
@@ -81,7 +102,7 @@ public class Game {
     }
 
     private void askQuestion() {
-        String category = categoryAt(getPlace());
+        String category = categoryAt(cPlayer.place);
         Object question = questionsDeck.get(category).removeFirst();
         System.out.println(question);
     }
@@ -92,7 +113,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (isOutOfPenaltyBox()) {
+        if (cPlayer.isOutOfPenaltyBox()) {
             return winCoin();
         } else {
             changePlayer();
@@ -101,7 +122,7 @@ public class Game {
     }
 
     public boolean wrongAnswer() {
-        sendPlayerToPenaltyBox();
+        cPlayer.sendPlayerToPenaltyBox();
         System.out.println(cPlayer.name + " was sent to the penalty box");
 
         changePlayer();
@@ -118,7 +139,7 @@ public class Game {
 
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
-        boolean winner = winCoinPlayer();
+        boolean winner = cPlayer.winCoinPlayer();
         changePlayer();
 
         return winner;
@@ -129,32 +150,5 @@ public class Game {
         cPlayer = realPlayers.get(currentPlayer);
     }
 
-    private boolean isOutOfPenaltyBox() {
-        return !cPlayer.inPenaltyBox;
-    }
 
-    private int getPlace() {
-        return cPlayer.place;
-    }
-
-    private void allowPlayerOutOfPenaltyBox() {
-        cPlayer.inPenaltyBox = false;
-    }
-
-    private void sendPlayerToPenaltyBox() {
-        System.out.println("Question was incorrectly answered");
-        cPlayer.inPenaltyBox = true;
-    }
-
-    private boolean winCoinPlayer() {
-        cPlayer.purse++;
-        System.out.println(cPlayer.name + " now has " + cPlayer.purse + " Gold Coins.");
-
-        return didPlayerWin();
-    }
-
-
-    private boolean didPlayerWin() {
-        return cPlayer.purse != 6;
-    }
 }
