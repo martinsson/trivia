@@ -1,6 +1,8 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.*;
 
@@ -19,26 +21,21 @@ public class Game {
     private Map<String, LinkedList> questionsDeck = new HashMap();
     private List<String> categories = asList("Pop","Science","Sports","Rock");
 
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
-
     int currentPlayer = 0;
 
     public Game() {
+        categories.forEach(category -> {
+            LinkedList questions = makeQuestions(category);
+            questionsDeck.put(category, questions);
+        });
+    }
+
+    private LinkedList makeQuestions(String category) {
+        LinkedList questions = new LinkedList();
         for (int i = 0; i < 50; i++) {
-            popQuestions.addLast("Pop Question " + i);
-            scienceQuestions.addLast(("Science Question " + i));
-            sportsQuestions.addLast(("Sports Question " + i));
-            rockQuestions.addLast("Rock Question " + i);
+            questions.addLast(String.format("%s Question %d", category, i));
         }
-
-        questionsDeck.put("Pop", popQuestions);
-        questionsDeck.put("Science", scienceQuestions);
-        questionsDeck.put("Sports", sportsQuestions);
-        questionsDeck.put("Rock", rockQuestions);
-
+        return questions;
     }
 
     public boolean add(String playerName) {
