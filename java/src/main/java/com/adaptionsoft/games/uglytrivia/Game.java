@@ -24,11 +24,12 @@ public class Game {
     List<Player> realPlayers = new ArrayList();
     int currentPlayer = 0;
 
-    private Map<String, LinkedList> questionsDeck = new HashMap();
+    private Map<String, LinkedList> questionsDeck;
     private List<String> categories = asList("Pop","Science","Sports","Rock");
 
 
     public Game() {
+        questionsDeck = new HashMap();
         categories.forEach(category -> {
             LinkedList questions = makeQuestions(category);
             questionsDeck.put(category, questions);
@@ -46,10 +47,12 @@ public class Game {
     public boolean add(String playerName) {
         realPlayers.add(new Player(playerName));
 
-
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + realPlayers.size());
+
+        // TODO this is wierd
         cPlayer = realPlayers.get(0);
+
         return true;
     }
 
@@ -62,12 +65,10 @@ public class Game {
         System.out.println("They have rolled a " + roll);
 
         if (!cPlayer.inPenaltyBox) {
-
             movePlayerOnBoard(roll);
             askQuestion();
         } else if (roll % 2 != 0) {
             cPlayer.inPenaltyBox = false;
-
             System.out.println(currentPlayerName() + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
             askQuestion();
