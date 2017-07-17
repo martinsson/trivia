@@ -24,7 +24,6 @@ public class Game {
     List<Player> realPlayers = new ArrayList();
     int currentPlayer = 0;
 
-    int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
 
     private Map<String, LinkedList> questionsDeck = new HashMap();
@@ -47,10 +46,9 @@ public class Game {
     }
 
     public boolean add(String playerName) {
-
         realPlayers.add(new Player(playerName));
-        purses[howManyPlayers()] = 0;
         inPenaltyBox[howManyPlayers()] = false;
+
 
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + realPlayers.size());
@@ -124,8 +122,8 @@ public class Game {
 
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
-        purses[currentPlayer]++;
-        System.out.println(currentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
+        cPlayer.purse++;
+        System.out.println(currentPlayerName() + " now has " + cPlayer.purse + " Gold Coins.");
 
         boolean winner = didPlayerWin();
         changePlayer();
@@ -143,6 +141,6 @@ public class Game {
     }
 
     private boolean didPlayerWin() {
-        return !(purses[currentPlayer] == 6);
+        return !(cPlayer.purse == 6);
     }
 }
