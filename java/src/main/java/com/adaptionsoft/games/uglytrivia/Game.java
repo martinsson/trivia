@@ -81,13 +81,13 @@ public class Game {
     }
 
     private void askQuestion() {
-        Object question = questionsDeck.get(currentCategory()).removeFirst();
+        String category = categoryAt(getPlace());
+        Object question = questionsDeck.get(category).removeFirst();
         System.out.println(question);
     }
 
-
-    private String currentCategory() {
-        int categoryPosition = getPlace() % categories.size();
+    private String categoryAt(int place) {
+        int categoryPosition = place % categories.size();
         return categories.get(categoryPosition);
     }
 
@@ -111,8 +111,9 @@ public class Game {
     private void movePlayerOnBoard(int roll) {
         cPlayer.place = (cPlayer.place + roll) % 12;
 
-        System.out.println(cPlayer.name + "'s new location is " + getPlace());
-        System.out.println("The category is " + currentCategory());
+        int newPlace = cPlayer.place;
+        System.out.println(cPlayer.name + "'s new location is " + newPlace);
+        System.out.println("The category is " + categoryAt(newPlace));
     }
 
     private boolean winCoin() {
@@ -154,6 +155,6 @@ public class Game {
 
 
     private boolean didPlayerWin() {
-        return !(cPlayer.purse == 6);
+        return cPlayer.purse != 6;
     }
 }
