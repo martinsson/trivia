@@ -8,12 +8,22 @@ import static java.util.Arrays.*;
 
 public class Game {
 
-    //    public static class Player {
-//        int purse = 0;
-//        boolean inPenaltyBox;
-//        int place = 0;
-//    }
-    ArrayList players = new ArrayList();
+
+    public static class Player {
+        int purse = 0;
+        boolean inPenaltyBox;
+        int place = 0;
+        private String name;
+
+        public Player(String name) {
+            this.name = name;
+        }
+    }
+
+    private Player cPlayer;
+    List<Player> realPlayers = new ArrayList();
+    int currentPlayer = 0;
+
     int[] places = new int[6];
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
@@ -21,7 +31,6 @@ public class Game {
     private Map<String, LinkedList> questionsDeck = new HashMap();
     private List<String> categories = asList("Pop","Science","Sports","Rock");
 
-    int currentPlayer = 0;
 
     public Game() {
         categories.forEach(category -> {
@@ -40,23 +49,23 @@ public class Game {
 
     public boolean add(String playerName) {
 
-
-        players.add(playerName);
+        realPlayers.add(new Player(playerName));
         places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
         inPenaltyBox[howManyPlayers()] = false;
 
         System.out.println(playerName + " was added");
-        System.out.println("They are player number " + players.size());
+        System.out.println("They are player number " + realPlayers.size());
+        cPlayer = realPlayers.get(0);
         return true;
     }
 
     public int howManyPlayers() {
-        return players.size();
+        return realPlayers.size();
     }
 
     public void roll(int roll) {
-        System.out.println(players.get(currentPlayer) + " is the current player");
+        System.out.println(currentPlayerName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
         if (!inPenaltyBox[currentPlayer]) {
@@ -66,11 +75,11 @@ public class Game {
         } else if (roll % 2 != 0) {
             inPenaltyBox[currentPlayer] = false;
 
-            System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
+            System.out.println(currentPlayerName() + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
             askQuestion();
         } else {
-            System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
+            System.out.println(currentPlayerName() + " is not getting out of the penalty box");
         }
 
     }
@@ -78,7 +87,7 @@ public class Game {
     private void movePlayerOnBoard(int roll) {
         places[currentPlayer] = (places[currentPlayer] + roll) % 12;
 
-        System.out.println(players.get(currentPlayer) + "'s new location is " + places[currentPlayer]);
+        System.out.println(currentPlayerName() + "'s new location is " + places[currentPlayer]);
         System.out.println("The category is " + currentCategory());
     }
 
@@ -104,7 +113,7 @@ public class Game {
 
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
-        System.out.println(players.get(currentPlayer) + " was sent to the penalty box");
+        System.out.println(currentPlayerName() + " was sent to the penalty box");
         inPenaltyBox[currentPlayer] = true;
 
         changePlayer();
@@ -114,7 +123,7 @@ public class Game {
     private boolean winCoin() {
         System.out.println("Answer was correct!!!!");
         purses[currentPlayer]++;
-        System.out.println(players.get(currentPlayer) + " now has " + purses[currentPlayer] + " Gold Coins.");
+        System.out.println(currentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
 
         boolean winner = didPlayerWin();
         changePlayer();
@@ -122,8 +131,13 @@ public class Game {
         return winner;
     }
 
+    private Object currentPlayerName() {
+        return cPlayer.name;
+    }
+
     private void changePlayer() {
-        currentPlayer = (currentPlayer + 1) % players.size();
+        currentPlayer = (currentPlayer + 1) % realPlayers.size();
+        cPlayer = realPlayers.get(currentPlayer);
     }
 
     private boolean didPlayerWin() {
