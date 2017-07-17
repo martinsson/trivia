@@ -24,8 +24,6 @@ public class Game {
     List<Player> realPlayers = new ArrayList();
     int currentPlayer = 0;
 
-    boolean[] inPenaltyBox = new boolean[6];
-
     private Map<String, LinkedList> questionsDeck = new HashMap();
     private List<String> categories = asList("Pop","Science","Sports","Rock");
 
@@ -47,7 +45,6 @@ public class Game {
 
     public boolean add(String playerName) {
         realPlayers.add(new Player(playerName));
-        inPenaltyBox[howManyPlayers()] = false;
 
 
         System.out.println(playerName + " was added");
@@ -64,12 +61,12 @@ public class Game {
         System.out.println(currentPlayerName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (!inPenaltyBox[currentPlayer]) {
+        if (!cPlayer.inPenaltyBox) {
 
             movePlayerOnBoard(roll);
             askQuestion();
         } else if (roll % 2 != 0) {
-            inPenaltyBox[currentPlayer] = false;
+            cPlayer.inPenaltyBox = false;
 
             System.out.println(currentPlayerName() + " is getting out of the penalty box");
             movePlayerOnBoard(roll);
@@ -103,7 +100,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (!inPenaltyBox[currentPlayer]) {
+        if (!cPlayer.inPenaltyBox) {
             return winCoin();
         } else {
             changePlayer();
@@ -114,7 +111,7 @@ public class Game {
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         System.out.println(currentPlayerName() + " was sent to the penalty box");
-        inPenaltyBox[currentPlayer] = true;
+        cPlayer.inPenaltyBox = true;
 
         changePlayer();
         return true;
