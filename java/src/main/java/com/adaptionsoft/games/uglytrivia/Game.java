@@ -9,6 +9,15 @@ public class Game {
 
     /*
     seems clean as a result,
+    Player was easy to identify and isolate
+
+    Future candidates are
+        - questionsDeck
+        - board
+        - realPlayers
+
+    Learnings, be very wary about what to extract, ex boardsize lingers in a function that well could have ended up in
+    player, but might as well be in board class
      */
 
     private Player cPlayer;
