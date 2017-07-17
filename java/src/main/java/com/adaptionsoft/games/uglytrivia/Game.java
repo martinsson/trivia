@@ -11,38 +11,6 @@ public class Game {
     seems clean as a result,
      */
 
-    public static class Player {
-        int purse = 0;
-        boolean inPenaltyBox;
-        int place = 0;
-        private String name;
-
-        public Player(String name) {
-            this.name = name;
-        }
-
-        public boolean winCoinPlayer() {
-            purse++;
-            System.out.println(name + " now has " + purse + " Gold Coins.");
-
-            boolean didPlayerNotWin = purse != 6;
-            return didPlayerNotWin;
-        }
-
-        public void sendPlayerToPenaltyBox() {
-            System.out.println("Question was incorrectly answered");
-            inPenaltyBox = true;
-        }
-
-        public void allowPlayerOutOfPenaltyBox() {
-            inPenaltyBox = false;
-        }
-
-        public boolean isOutOfPenaltyBox() {
-            return !inPenaltyBox;
-        }
-    }
-
     private Player cPlayer;
     List<Player> realPlayers = new ArrayList();
     int currentPlayer = 0;
