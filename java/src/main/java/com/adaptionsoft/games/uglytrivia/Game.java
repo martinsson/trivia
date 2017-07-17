@@ -24,7 +24,6 @@ public class Game {
     List<Player> realPlayers = new ArrayList();
     int currentPlayer = 0;
 
-    int[] places = new int[6];
     int[] purses = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
 
@@ -50,7 +49,6 @@ public class Game {
     public boolean add(String playerName) {
 
         realPlayers.add(new Player(playerName));
-        places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
         inPenaltyBox[howManyPlayers()] = false;
 
@@ -85,10 +83,14 @@ public class Game {
     }
 
     private void movePlayerOnBoard(int roll) {
-        places[currentPlayer] = (places[currentPlayer] + roll) % 12;
+        cPlayer.place = (cPlayer.place + roll) % 12;
 
-        System.out.println(currentPlayerName() + "'s new location is " + places[currentPlayer]);
+        System.out.println(currentPlayerName() + "'s new location is " + getPlace());
         System.out.println("The category is " + currentCategory());
+    }
+
+    private int getPlace() {
+        return cPlayer.place;
     }
 
     private void askQuestion() {
@@ -98,7 +100,7 @@ public class Game {
 
 
     private String currentCategory() {
-        int categoryPosition = places[currentPlayer] % categories.size();
+        int categoryPosition = getPlace() % categories.size();
         return categories.get(categoryPosition);
     }
 
